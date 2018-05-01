@@ -69,7 +69,7 @@ class App extends Component {
     const { instance } = this.state;
     instance.getCoutner.call().then(counter => {
       this.setState({
-        counterSign: counter.s > 0 ? '' : '-',
+        counterSign: counter.s >= 0 ? '' : '-',
         counter: counter.c[0]
       })
     })
@@ -83,7 +83,7 @@ class App extends Component {
       return instance.getCoutner.call()
     }).then((counterResult) => {
       const counter = counterResult.c[0]
-      const counterSign = counterResult.s > 0 ? '' : '-'
+      const counterSign = counterResult.s >= 0 ? '' : '-'
       this.setState({
         counterSign: counterSign,
         counter: counter
@@ -99,7 +99,7 @@ class App extends Component {
       return instance.getCoutner.call()
     }).then((counterResult) => {
       const counter = counterResult.c[0]
-      const counterSign = counterResult.s > 0 ? '' : '-'
+      const counterSign = counterResult.s >= 0 ? '' : '-'
       this.setState({
         counterSign: counterSign,
         counter: counter
@@ -119,7 +119,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
 
-        <h1>{counter === 0 ? <div /> : counterSign}{counter}</h1>
+        <h1>{counterSign}{counter}</h1>
         <button type="button" onClick={this.increment}>+</button>
         <button type="button" onClick={this.decrement}>-</button>
       </div>
