@@ -9,9 +9,10 @@ import './App.css';
 
 class App extends Component {
   state = {
-    myWallet: undefined,
     web3: undefined,
     instance: undefined,
+    myWallet: undefined,
+    counterSign: '',
     counter: 0
   }
 
@@ -54,10 +55,13 @@ class App extends Component {
         })
       })
 
+      console.log(`=========================ACCOUNTS=========================`)
       accounts.map((item, index) => {
         console.warn(`${index} => ${item}`)
         return undefined
       })
+      console.log(`===========================================================`)
+
     })
   }
 
@@ -65,6 +69,7 @@ class App extends Component {
     const { instance } = this.state;
     instance.getCoutner.call().then(counter => {
       this.setState({
+        counterSign: counter.s > 0 ? '' : '-',
         counter: counter.c[0]
       })
     })
@@ -73,14 +78,14 @@ class App extends Component {
   increment = () => {
     const { instance } = this.state;
     instance.increment({ from: this.state.myWallet }).then((result) => {
-      console.log(result);
       return result
     }).then((counterTx) => {
-      console.log(counterTx)
       return instance.getCoutner.call()
     }).then((counterResult) => {
       const counter = counterResult.c[0]
+      const counterSign = counterResult.s > 0 ? '' : '-'
       this.setState({
+        counterSign: counterSign,
         counter: counter
       })
     })
@@ -89,21 +94,21 @@ class App extends Component {
   decrement = () => {
     const { instance } = this.state;
     instance.decrement({ from: this.state.myWallet }).then((result) => {
-      console.log(result);
       return result
     }).then((counterTx) => {
-      console.log(counterTx)
       return instance.getCoutner.call()
     }).then((counterResult) => {
       const counter = counterResult.c[0]
+      const counterSign = counterResult.s > 0 ? '' : '-'
       this.setState({
+        counterSign: counterSign,
         counter: counter
       })
     })
   }
 
   render() {
-    const { counter } = this.state;
+    const { counter, counterSign } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -114,7 +119,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
 
-        <h1>{counter}</h1>
+        <h1>{counter === 0 ? <div /> : counterSign}{counter}</h1>
         <button type="button" onClick={this.increment}>+</button>
         <button type="button" onClick={this.decrement}>-</button>
       </div>
